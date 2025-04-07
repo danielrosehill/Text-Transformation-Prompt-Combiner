@@ -466,8 +466,27 @@ def combine_prompts(combiner):
     with combined_display:
         if st.session_state.get('show_combined', False):
             st.markdown("<hr>", unsafe_allow_html=True)
-            st.subheader("Your Transformation Prompt Stack")
-            st.text_area("", value=st.session_state.combined_prompt, height=400)
+            st.subheader("Your Transformation System Prompt")
+            
+            col1, col2 = st.columns([0.95, 0.05])
+            
+            with col1:
+                # Display the combined prompt in a text area
+                st.text_area("", value=st.session_state.combined_prompt, height=400, key="combined_prompt_display")
+            
+            with col2:
+                # Add a copy button with clipboard icon
+                st.markdown("""
+                <div style="margin-top: 25px;">
+                    <button 
+                        onclick="navigator.clipboard.writeText(document.querySelector('.stTextArea textarea').value);this.innerHTML='✓';"
+                        style="background: none; border: none; cursor: pointer; font-size: 20px;"
+                        title="Copy to clipboard"
+                    >
+                        📋
+                    </button>
+                </div>
+                """, unsafe_allow_html=True)
             
             # Text transformation area
             st.subheader("Test Your Transformation Stack")

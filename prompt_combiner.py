@@ -81,26 +81,56 @@ class PromptCombiner:
         # Initialize the combined text
         combined_text = ""
         
-        # Add the content of each prompt with category-based labels
+        # Organize prompts by category
+        workflow_prompts = []
+        basic_prompts = []
+        additional_prompts = []
+        
         for prompt in selected_prompts:
+            category = prompt.get('category', '').lower()
+            
+            # Identify basic cleanup prompt (should be in basic_prompts)
+            if prompt['id'] == basic_cleanup_id:
+                basic_prompts.append(prompt)
+            # Add workflow related prompts first
+            elif category == 'workflow':
+                workflow_prompts.append(prompt)
+            # Everything else goes to additional prompts
+            else:
+                additional_prompts.append(prompt)
+        
+        # 1. Add workflow section if available
+        if workflow_prompts:
+            combined_text += "## Workflow\n\n"
+            for prompt in workflow_prompts:
+                combined_text += f"{prompt['content']}\n\n"
+        
+        # 2. Add basic instructions section
+        if basic_prompts:
+            combined_text += "## Basic Instructions\n\n"
+            for prompt in basic_prompts:
+                combined_text += f"{prompt['content']}\n\n"
+        
+        # 3. Add additional sections with appropriate headers
+        for prompt in additional_prompts:
             category = prompt.get('category', '').lower()
             
             # Create appropriate section label based on category
             if category == 'tone':
-                section_label = "Tone Instructions"
+                section_label = "## Tone Instructions"
             elif category == 'format':
-                section_label = "Formatting Instructions"
+                section_label = "## Formatting Instructions"
             elif category == 'length':
-                section_label = "Length Instructions"
+                section_label = "## Length Instructions"
             elif category == 'style':
-                section_label = "Style Instructions"
+                section_label = "## Style Instructions"
             elif category == 'ai-prompts':
-                section_label = "AI Instructions"
+                section_label = "## AI Instructions"
             else:
-                section_label = f"{category.title()} Instructions"
+                section_label = f"## {category.title()} Instructions"
             
             # Add the section label and content
-            combined_text += f"{section_label}:\n{prompt['content']}\n\n"
+            combined_text += f"{section_label}\n{prompt['content']}\n\n"
         
         return combined_text.strip()
     
