@@ -1,5 +1,7 @@
 # Text-Transformation-Prompt-Combiner
 
+[![System Prompts Library](https://img.shields.io/badge/System%20Prompts-Library-blue)](https://github.com/danielrosehill/Speech-To-Text-System-Prompt-Library)
+
 A tool for combining system prompts designed for converting dictated text into various formats.
 
 ## Overview
